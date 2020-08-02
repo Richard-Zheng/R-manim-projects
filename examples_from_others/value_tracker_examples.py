@@ -2,7 +2,7 @@
 # Original source: Elteoremadebeethoven / AnimationsWithManim
 #                  - /English/update_successions/value_tracker_examples.py
 
-#from manimlib.imports import *
+from manimlib.imports import *
 #from big_ol_pile_of_manim_imports import *
 
 class FunctionTracker(Scene):
@@ -111,7 +111,7 @@ class FunctionTrackerWithNumberLine(Scene):
         # Set the Label (x,or x**2)
         number_label = TexMobject(label)
         # Set the arrow 
-        arrow = Arrow(UP,DOWN,buff=0).set_height(0.5)
+        arrow = ArrowTip(start_angle=-90 * DEGREES)
         # Set the number_line
         number_line = NumberLine(
             x_min=0,
