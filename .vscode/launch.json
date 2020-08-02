@@ -1,0 +1,35 @@
+{
+    // 使用 IntelliSense 了解相关属性。
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run manim", // 渲染manim的480p15预览
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\..\\manim\\manim.py", // manim.py的路径
+            "console": "integratedTerminal",           // 使用vscode的终端进行调试
+            "args": [
+                "${file}",                   // 当前文件
+                "-pl",                       // 480p15预览参数
+                "--media_dir",               // 输出位置
+                "${workspaceFolder}\\export" // 这里定义输出位置
+            ]
+        },
+        {
+            "name": "Render manim",                   // 渲染1080p60的manim动画
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\..\\manim\\manim.py",// manim.py的路径
+            "console": "integratedTerminal",          // 使用vscode的终端进行调试
+            "args": [
+                "${file}",                   // 当前文件
+                "--high_quality",            // 1080p60输出参数
+                "-p",                        // 预览参数
+                "--media_dir",               // 输出位置
+                "${workspaceFolder}\\export" // 这里定义输出位置
+            ]
+        }
+    ]
+}
