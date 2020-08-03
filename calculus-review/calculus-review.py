@@ -36,10 +36,10 @@ class TangentExplain(Scene):
         x = 1
         # ValueTrackers definition
         delta_x_value = ValueTracker(0.5)
-        delta_fx_value = ValueTracker(self.func(x + delta_x_value.get_value()) - self.func(x))
+        delta_fx_value = ValueTracker(self.delta_func(x, delta_x_value.get_value()))
         # DecimalNumber definition
         delta_x_tex = DecimalNumber(delta_x_value.get_value()).add_updater(lambda v: v.set_value(delta_x_value.get_value()))
-        delta_fx_tex = DecimalNumber(delta_fx_value.get_value()).add_updater(lambda v: v.set_value(delta_fx_value.get_value()))
+        delta_fx_tex = DecimalNumber(delta_fx_value.get_value()).add_updater(lambda v: v.set_value(self.delta_func(x, delta_fx_value.get_value())))
         # TeX labels definition
         delta_x_label = TexMobject("\Delta x=")
         delta_fx_label = TexMobject("\Delta f(x)=")
@@ -83,6 +83,9 @@ class TangentExplain(Scene):
         )
         self.wait()
 
+    def delta_func(self, x, delta_x):
+        return self.func(x + delta_x) - self.func(x)
+
     def get_axes(self):
         self.axes = Axes(**self.axes_config)
         # FIX Y LABELS
@@ -101,42 +104,8 @@ class TangentExplain(Scene):
     def get_f(self,x_coord):
         return self.axes.c2p(x_coord, self.func(x_coord))
 
-    def get_numer_labels_to_numberline(self,number_line,x_max=None,x_min=0,buff=0.2,step_label=1,**tex_kwargs):
-        # This method return the labels of the NumberLine
-        labels = VGroup()
-        x_max = number_line.x_max
-        for x in range(x_min,x_max+1,step_label):
-            x_label = TexMobject(f"{x}",**tex_kwargs)
-            # See manimlib/mobject/number_line.py CONFIG dictionary
-            x_label.next_to(number_line.number_to_point(x),DOWN,buff=buff)
-            labels.add(x_label)
-        return labels
-
-    def get_number_line_group(self,number_label,x_max,unit_size,v_tracker,step_label=1,**number_line_config):
-        # Set the arrow 
-        arrow = ArrowTip(start_angle=-90 * DEGREES)
-        # Set the number_line
-        number_line = NumberLine(
-            x_min=0,
-            x_max=x_max,
-            unit_size=unit_size,
-            numbers_with_elongated_ticks=[],
-            **number_line_config
-            )
-        # Get the labels from number_line
-        labels = self.get_numer_labels_to_numberline(number_line,step_label=step_label,height=0.2)
-        # Set the arrow position
-        arrow.next_to(number_line.number_to_point(0),UP,buff=0)
-        # Grouping arrow and number_label
-        label = VGroup(arrow,number_label)
-        # Set the position of number_label
-        number_label.next_to(arrow,UP,buff=0.1)
-        # Grouping all elements
-        numer_group = VGroup(label,number_line,labels)
-        # Set the updater to the arrow and number_label
-        label.add_updater(lambda mob: mob.next_to(number_line.number_to_point(v_tracker.get_value()),UP,buff=0))
-
-        return numer_group
+    def get_point_from_x_coordinate(self,x_coord):
+        return self.axes.c2p(x_coord, self.func(x_coord))
 
 class FunctionTrackerWithNumberLine(Scene):
     def construct(self):
