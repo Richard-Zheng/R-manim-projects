@@ -61,18 +61,36 @@ class TangentExplain(Scene):
         # Align labels and numbers
         VGroup(delta_x_group, delta_fx_group).arrange(DOWN, buff=2, aligned_edge=DOWN).to_edge(UR)
 
-        # Get NumberLine, Arrow and label from x
+        # Get NumberLine, Arrow from x
         delta_x_number_line = NumberLine(
             x_min=-0.5,
             x_max=0.5,
             unit_size=3,
             tick_frequncy=0.1,
+            include_numbers=True,
         )
-        delta_x_number_line_arrow = ArrowTip(start_angle=-90 * DEGREES)
-        delta_x_number_line_arrow.next_to(delta_x_number_line.number_to_point(delta_x_value.get_value()), UP, buff=0)
-        delta_x_number_line_arrow.add_updater(lambda mob: mob.next_to(delta_x_number_line.number_to_point(delta_x_value.get_value()), UP, buff=0))
+        delta_x_number_line_arrow = self.get_arrow(
+            delta_x_number_line,
+            delta_x_value.get_value(),
+            delta_x_value.get_value,
+        )
         delta_x_number_line_group = VGroup(delta_x_number_line, delta_x_number_line_arrow)
         delta_x_number_line_group.next_to(delta_x_group, DOWN, buff=0.5)
+
+        delta_fx_number_line = NumberLine(
+            x_min=-1,
+            x_max=3,
+            unit_size=1,
+            tick_frequncy=2,
+            include_numbers=True,
+        )
+        delta_fx_number_line_arrow = self.get_arrow(
+            delta_fx_number_line,
+            self.delta_func(x, delta_x_value.get_value()),
+            lambda: self.delta_func(x, delta_x_value.get_value()),
+        )
+        delta_fx_number_line_group = VGroup(delta_fx_number_line, delta_fx_number_line_arrow)
+        delta_fx_number_line_group.next_to(delta_fx_group, DOWN, buff=0.5)
 
         self.play(
             Write(axes),
@@ -80,13 +98,14 @@ class TangentExplain(Scene):
             Write(plus_x_dot),
             Write(group),
             Write(delta_x_number_line_group),
+            Write(delta_fx_number_line_group),
             ShowCreation(func),
         )
         self.wait()
 
         self.play(
             delta_x_value.set_value, -0.5,
-            rate_func=linear,
+            rate_func=double_smooth,
             run_time=10
         )
         self.wait()
@@ -104,3 +123,9 @@ class TangentExplain(Scene):
 
     def get_point_from_x_coordinate(self,x_coord):
         return self.axes.c2p(x_coord, self.func(x_coord))
+
+    def get_arrow(self, number_line, tracking_value, value_update_function):
+        arrow = ArrowTip(start_angle=-90 * DEGREES)
+        arrow.next_to(number_line.number_to_point(tracking_value), UP, buff=0)
+        arrow.add_updater(lambda mob: mob.next_to(number_line.number_to_point(value_update_function()), UP, buff=0))
+        return arrow
