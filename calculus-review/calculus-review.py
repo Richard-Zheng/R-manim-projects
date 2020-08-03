@@ -41,8 +41,8 @@ class TangentExplain(Scene):
         delta_x_tex = DecimalNumber(delta_x_value.get_value()).add_updater(lambda v: v.set_value(delta_x_value.get_value()))
         delta_fx_tex = DecimalNumber(self.delta_func(x, delta_x_value.get_value())).add_updater(lambda v: v.set_value(self.delta_func(x, delta_x_value.get_value())))
         # TeX labels definition
-        delta_x_label = TexMobject("\Delta x=")
-        delta_fx_label = TexMobject("\Delta f(x)=")
+        delta_x_label = TexMobject(r"\Delta x=")
+        delta_fx_label = TexMobject(r"\Delta f(x)=")
         # Dot definition
         x_dot = Dot(point=self.get_point_from_x_coordinate(x))
         plus_x_dot = Dot(point=self.get_point_from_x_coordinate(x + delta_x_value.get_value()))
@@ -50,8 +50,7 @@ class TangentExplain(Scene):
         # Line definition
         tangent_line = Line(start=x_dot.get_center(), end=plus_x_dot.get_center())
         tangent_line.set_length(10)
-        # still contain some issues
-        tangent_line.add_updater(lambda mob: mob.put_start_and_end_on(self.get_point_from_x_coordinate(x), self.get_point_from_x_coordinate(x + delta_x_value.get_value())).set_length(10))
+        tangent_line.add_updater(lambda mob: True if delta_x_value.get_value() == 0 else mob.put_start_and_end_on(x_dot.get_center(), plus_x_dot.get_center()).set_length(10))
 
         ## Grouping
         # all labels and numbers
