@@ -44,8 +44,8 @@ class TangentExplain(Scene):
         delta_x_label = TexMobject("\Delta x=")
         delta_fx_label = TexMobject("\Delta f(x)=")
         # Dot definition
-        x_dot = self.get_dot_from_x_coord(x)
-        plus_x_dot = self.get_dot_from_x_coord(x + delta_x_value.get_value())
+        x_dot = Dot(point=self.get_point_from_x_coordinate(x))
+        plus_x_dot = Dot(point=self.get_point_from_x_coordinate(x + delta_x_value.get_value()))
 
         ## Grouping
         # all labels and numbers
@@ -93,13 +93,6 @@ class TangentExplain(Scene):
         for label in y_labels:
             label.rotate(-PI/2)
         return self.axes
-
-    def get_dot_from_x_coord(self,x_coord,**kwargs):
-        return Dot(
-            self.get_f(x_coord),
-            radius=self.dot_radius,
-            **kwargs
-        )
 
     def get_f(self,x_coord):
         return self.axes.c2p(x_coord, self.func(x_coord))
