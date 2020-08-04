@@ -70,8 +70,11 @@ class TangentExplain(Scene):
         tangent_line.set_length(10)
         tangent_line.add_updater(
             lambda mob:
-            True if delta_x_value.get_value() == 0
-            else mob.put_start_and_end_on(x_dot.get_center(), plus_x_dot.get_center()).set_length(10)
+                True if delta_x_value.get_value() == 0
+                else mob.put_start_and_end_on(
+                        x_dot.get_center(),
+                        plus_x_dot.get_center(),
+                    ).set_length(10)
         )
 
         # --- Grouping ---
