@@ -9,7 +9,7 @@ def get_arrow(number_line, tracking_value, value_update_function):
     return arrow
 
 
-class TangentExplain(Scene):
+class TangentExplain(ZoomedScene):
     CONFIG = {
         "x_start": 3,
         "x_end": 7,
@@ -97,8 +97,11 @@ class TangentExplain(Scene):
             unit_size=3,
             tick_frequency=0.1,
             include_numbers=True,
+            numbers_to_show=[-0.5, 0, 0.5],
+            decimal_number_config={
+                "num_decimal_places": 1,
+            },
         )
-        delta_x_number_line.add_numbers(-0.5, 0, 0.5)
         delta_x_number_line_arrow = get_arrow(
             delta_x_number_line,
             delta_x_value.get_value(),
